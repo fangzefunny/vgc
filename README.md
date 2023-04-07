@@ -1,4 +1,4 @@
-# value guided construals
+# Value guided construals
 
 Replicate some results in: 
 
