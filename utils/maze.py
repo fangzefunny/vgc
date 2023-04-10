@@ -58,15 +58,21 @@ key_map = {
 }
 
 class girdmaze:
+    nS = 11*11 
+    nA = 4
+    state_space = np.arange(nS).astype(int)
+    act_space   = np.arange(nA).astype(int)
 
-    def __init__(self, **kargs):
+    def __init__(self, **kwargs):
 
         # default dict
-        self.config = {
-            'layout': full_grid2,
-            'construal': '0123456',
-        }
-        for k in kargs.keys(): self.config[k] = kargs[k]
+        self.layout = full_grid2
+        self.config = '0123456'
+        self.value  = {k: .7 for k in list(self.config)}
+
+        # load args
+        for key, val in kwargs.items(): 
+            setattr(self, key, val)
 
         # init 
         self.direct = [
@@ -75,8 +81,7 @@ class girdmaze:
             np.array([ 0,-1]), # left
             np.array([ 0, 1]), # right
         ]
-        self.layout = self.config['layout']
-        self.get_occupancy(self.config['construal'])
+        self.get_occupancy()
         self.nS = self.occupancy.reshape([-1]).shape[0]
         self.nA = 4
         self.state_space = np.arange(self.nS).astype(int)
@@ -91,7 +96,7 @@ class girdmaze:
         n = self.occupancy.shape[1]
         return np.array([state//n, state%n])
     
-    def get_occupancy(self, config):
+    def get_occupancy(self):
         map_dict = {
             '#': 1,
             '.': 0,
@@ -100,8 +105,8 @@ class girdmaze:
         }
         for obst in range(10):
             map_dict[str(obst)] = 0 
-        for obst in list(config):
-            map_dict[obst] = .5
+        for obst in list(self.config):
+            map_dict[obst] = self.value[obst]
         self.occupancy = np.array([list(map(lambda x: map_dict[x], row)) 
                                    for row in self.layout])
         # get the goal loc
@@ -164,7 +169,7 @@ class girdmaze:
         '''Visualize the figure
         '''
         occupancy = np.array(self.occupancy)
-        sns.heatmap(occupancy, cmap=viz.listmap, ax=ax, 
+        sns.heatmap(occupancy, cmap=viz.mixMap, ax=ax, 
                     lw=.5, linecolor=[.9]*3, cbar=False)
         ax.axhline(y=0, color='k',lw=5)
         ax.axhline(y=occupancy.shape[0], color='k',lw=5)

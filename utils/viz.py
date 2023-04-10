@@ -80,8 +80,11 @@ class viz:
     YellowsMap2 = matplotlib.colors.LinearSegmentedColormap.from_list(
                     'vizYellows', [lYellow2, Yellow])
     
+    mixMap = matplotlib.colors.LinearSegmentedColormap.from_list(
+                    'vizMix',   [np.array([1]*3), lBlue, Blue, np.array([0]*3)])
+    
     # discrete 
-    listmap = matplotlib.colors.ListedColormap([[1]*3, Blue, [0]*3])
+    listmap = matplotlib.colors.ListedColormap([[1]*3, Blue, lBlue, [0]*3])
 
     @staticmethod
     def get_style(): 

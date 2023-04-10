@@ -1,7 +1,7 @@
 import itertools
 
-def get_all_construals(chars='0123456'):
-    
+def get_all_configs(chars='0123456'):
+
     # define the characters that can be used
     chars = list(chars)
 
